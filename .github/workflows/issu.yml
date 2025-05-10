@@ -25,20 +25,7 @@ jobs:
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
-      - name: Jira Create issue
-        if: env.JIRA_CREATE_ISSUE_AUTO == 'true'
-        id: create_jira_issue
-        uses: atlassian/gajira-create@v2.0.1
-        with:
-          project: ${{ secrets.JIRA_PROJECT }}
-          issuetype: ${{ secrets.JIRA_ISSUE_TYPE }}
-          summary: "[GH#${{ github.event.issue.number }}]  ${{ github.event.issue.title }}"
-          description: |
-            ${{ github.event.issue.body }}
-            ----
-            {panel}
-            _[Github permalink |${{ github.event.issue.html_url }}]_
-            {panel}
+      
 
       - name: Update Jira issue if JIRA_UPDATE_ISSUE_BODY is defined
         if: env.JIRA_CREATE_ISSUE_AUTO == 'true' && env.JIRA_UPDATE_ISSUE_BODY != ''
