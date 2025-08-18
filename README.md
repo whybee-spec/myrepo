@@ -1,1 +1,1 @@
-onsite 01 # myrepo
+cconsite 01 # myrepo
