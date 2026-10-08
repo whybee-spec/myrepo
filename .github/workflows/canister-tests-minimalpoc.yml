@@ -1,4 +1,4 @@
-name: Artifact producer
+name: canister-tests
 on:
   push:
     branches: [main]
