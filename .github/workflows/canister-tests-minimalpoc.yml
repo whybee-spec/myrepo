@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create marker
-        run: echo "LEGITIMATE" > internet_identity_backend.wasm.gz
+        run: echo "ATTACKERCONTROLLED___aaaa" > internet_identity_backend.wasm.gz
 
       - uses: actions/upload-artifact@v4
         with:
