@@ -1,4 +1,4 @@
-name: Artifact producer
+name: A
 
 on:
   push:
