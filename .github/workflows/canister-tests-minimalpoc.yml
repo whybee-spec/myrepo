@@ -1,0 +1,22 @@
+name: Artifact producer
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create marker
+        env:
+          SOURCE: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+        run: |
+          printf 'source=%s\nevent=%s\n' "$SOURCE" "$GITHUB_EVENT_NAME" > internet_identity_backend.wasm.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: internet_identity_backend.wasm.gz
+          path: internet_identity_backend.wasm.gz
