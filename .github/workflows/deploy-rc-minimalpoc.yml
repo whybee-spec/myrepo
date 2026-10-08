@@ -1,4 +1,4 @@
-name: Artifact selector dry run
+name: deploy-rc
 on:
   workflow_dispatch:
 
