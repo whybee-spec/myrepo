@@ -1,4 +1,5 @@
-name: canister-tests
+name: Canister tests lab
+
 on:
   push:
     branches: [main]
@@ -10,13 +11,19 @@ permissions:
 jobs:
   produce:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Create marker
+      - name: Create harmless marker
         env:
+          LABEL: ${{ github.event_name == 'pull_request' && 'ATTACKER_CONTROLLED' || 'LEGITIMATE' }}
           SOURCE: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
         run: |
-          printf 'source=%s\nevent=%s\n' "$SOURCE" "$GITHUB_EVENT_NAME" > internet_identity_backend.wasm.gz
-      - uses: actions/upload-artifact@v4
+          printf 'LABEL=%s\nSOURCE=%s\nEVENT=%s\n' \
+            "$LABEL" "$SOURCE" "$GITHUB_EVENT_NAME" \
+            > internet_identity_backend.wasm.gz
+
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@v4
         with:
           name: internet_identity_backend.wasm.gz
           path: internet_identity_backend.wasm.gz
