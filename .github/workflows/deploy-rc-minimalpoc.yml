@@ -1,4 +1,5 @@
-name: deploy-rc
+name: Deploy RC dry run
+
 on:
   workflow_dispatch:
 
@@ -10,18 +11,25 @@ jobs:
   select:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v7
+      - name: Select artifact using DFINITY's rule
+        id: pick
+        uses: actions/github-script@v7
         with:
           script: |
-            const { data: repo } = await github.rest.repos.get(context.repo);
             const artifacts = await github.paginate(
               github.rest.actions.listArtifactsForRepo,
-              { ...context.repo, name: "internet_identity_backend.wasm.gz" }
+              {
+                ...context.repo,
+                name: "internet_identity_backend.wasm.gz"
+              }
             );
+
             const selected = artifacts
               .filter(a => !a.expired)
               .filter(a => a.workflow_run?.head_branch === "main")
-              .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
+              .sort((a, b) =>
+                new Date(b.updated_at) - new Date(a.updated_at)
+              )[0];
 
             if (!selected) throw new Error("No matching artifact");
 
@@ -30,11 +38,20 @@ jobs:
               run_id: selected.workflow_run.id
             });
 
-            core.info(JSON.stringify({
-              artifact_id: selected.id,
-              branch: selected.workflow_run.head_branch,
-              source: run.head_repository?.full_name,
-              event: run.event,
-              source_is_fork:
-                selected.workflow_run.head_repository_id !== repo.id
-            }, null, 2));
+            core.info(`Selected artifact ID: ${selected.id}`);
+            core.info(`Branch: ${selected.workflow_run.head_branch}`);
+            core.info(`Event: ${run.event}`);
+            core.info(`Source: ${run.head_repository?.full_name}`);
+
+            core.setOutput("run_id", String(selected.workflow_run.id));
+
+      - name: Download selected artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: internet_identity_backend.wasm.gz
+          run-id: ${{ steps.pick.outputs.run_id }}
+          github-token: ${{ github.token }}
+          path: selected
+
+      - name: Show selected content
+        run: cat selected/internet_identity_backend.wasm.gz
