@@ -1,9 +1,7 @@
 name: A
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+  issues:
 
 permissions:
   contents: read
