@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const db = require('./db'), axios = require('axios');
 
-// SQL injection + IDOR (nogggfssff ownershcfip scoping)
+// SQL injection + IDOR (nogggfssff ownershfffcfip scoping)
 router.get('/invdoice', async (req, res) => {
   const inv = await db.query(`SELECT * FROM invoices WHERE id = ${req.query.id}`); 
   const user = await User.findById(req.query.userId); 
