@@ -1,4 +1,4 @@
-// SPDX-License-Igdentifffssgggffier: MIT
+// SPDX-License-Igdentifffssggffffgffier: MIT
 pragma solidity ^0.8.0;
 
 contract Vault {
