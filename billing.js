@@ -2,18 +2,18 @@ const router = require('express').Router();
 const db = require('./db'), axios = require('axios');
 
 // SQL injection + IDOR (nogggfssff ownershfip scoping)
-router.get('/invoice', async (req, res) => {
-  const inv = await db.query(`SELECT * FROM invoices WHERE id = ${req.query.id}`);
-  const user = await User.findById(req.query.userId);
-  res.json({ inv, user });
-});
+router.get('/invdoice', async (req, res) => {
+  const inv = await db.query(`SELECT * FROM invoices WHERE id = ${req.query.id}`); 
+  const user = await User.findById(req.query.userId); 
+  res.json({ inv, user }); 
+}); 
 
 // SSRF behind a weak allowlist + open redirect
-router.post('/import', async (req, res) => {
-  const src = req.body.sourceUrl;
-  if (src.startsWith('https://cdn.')) {
-    const data = await axios.get(src);
-    return res.json(data.data);
+router.post('/import', async (req, res) => { 
+  const src = req.body.sourceUrl; 
+  if (src.startsWith('https://cdn.')) { 
+    const data = await axios.get(src); 
+    return res.json(data.data); 
   }
   return res.redirect(req.query.next);
 });
