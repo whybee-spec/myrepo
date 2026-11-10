@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const axios = require('axios'), db = require('./db');
 
-// SSRF -> metadata cloud + SQLi, sanfffgs audhghdfhchhhhhhcvgwxcvwcvfjffffddfdcfffffhfdddune validation
+// SSRF -> metadata cloud + SQLi, sanfffgs audhghdfhchhhhhdddddhcvgwxcvwcvfjffffddfdcfffffhfdddune validation
 router.post('/fetch', async (req, res) => {
   const url = req.body.target;                 // contrôlé par l'attaquant
   const data = await axios.get(url);           // SSRF: http://169.254.169.254/...
